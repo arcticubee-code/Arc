@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A Little Note For You</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-outer: #F6F1EE;
+      --bg-cream: #FDFBF7;
+      --border-pink: #E5C7CD;
+      --border-inner: #E8D5D8;
+      --text-dark: #4A3B3C;
+      --text-muted: #8C7375;
+      --accent-rose: #B5727E;
+      --sage-green: #677861;
+      --sage-hover: #586852;
+      --no-pink-light: #DF9CA8;
+      --no-pink-dark: #C26B7A;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-outer);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: var(--text-dark);
+      min-height: 100dvh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+      overflow-x: hidden;
+    }
+
+    .card-frame {
+      position: relative;
+      width: 100%;
+      max-width: 410px;
+      min-height: 700px;
+      background-color: var(--bg-cream);
+      border: 14px solid var(--border-pink);
+      border-radius: 28px;
+      box-shadow: 0 20px 50px rgba(74, 59, 60, 0.12), inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .inner-border {
+      position: absolute;
+      inset: 10px;
+      border: 1px solid var(--border-inner);
+      border-radius: 16px;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* Watercolor rose corner decorations */
+    .floral-tr {
+      position: absolute;
+      top: -6px;
+      right: -8px;
+      width: 155px;
+      height: 185px;
+      pointer-events: none;
+      z-index: 3;
+      opacity: 0.92;
+    }
+
+    .floral-bl {
+      position: absolute;
+      bottom: -8px;
+      left: -8px;
+      width: 155px;
+      height: 185px;
+      pointer-events: none;
+      z-index: 3;
+      opacity: 0.92;
+      transform: rotate(180deg);
+    }
+
+    /* Decorative floating tiny hearts */
+    .heart-deco {
+      position: absolute;
+      color: #D79EA7;
+      font-size: 11px;
+      pointer-events: none;
+      z-index: 2;
+      opacity: 0.75;
+    }
+
+    .screen {
+      position: relative;
+      z-index: 5;
+      flex: 1;
+      display: none;
+      flex-direction: column;
+      padding: 34px 26px 36px;
+      animation: fadeIn 0.45s ease forwards;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .eyebrow {
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: 2.6px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .divider-line {
+      width: 32px;
+      height: 1px;
+      background-color: #D4B5BA;
+      margin: 10px auto 0;
+    }
+
+    /* ================= SCREEN 1: PROPOSAL ================= */
+    #screen-1 {
+      justify-content: space-between;
+      align-items: center;
+      text-align: center;
+    }
+
+    .proposal-center {
+      position: relative;
+      width: 100%;
+      margin: auto 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 6;
+    }
+
+    .tiny-rose-icon {
+      margin-bottom: 14px;
+      color: #C97D89;
+      font-size: 16px;
+    }
+
+    .main-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: 36px;
+      line-height: 1.18;
+      font-weight: 400;
+      color: var(--text-dark);
+      margin-bottom: 10px;
+    }
+
+    .main-heading em {
+      font-style: italic;
+      color: var(--accent-rose);
+      font-weight: 400;
+    }
+
+    .tease-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 16px;
+      color: var(--text-muted);
+      min-height: 24px;
+      margin-bottom: 26px;
+      transition: all 0.25s ease;
+    }
+
+    .btn-yes {
+      position: relative;
+      background-color: var(--sage-green);
+      color: #FFFFFF;
+      border: none;
+      padding: 15px 38px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2.4px;
+      text-transform: uppercase;
+      border-radius: 3px;
+      cursor: pointer;
+      box-shadow: 0 6px 16px rgba(103, 120, 97, 0.28);
+      transition: transform 0.26s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s ease, box-shadow 0.2s ease;
+      z-index: 10;
+    }
+
+    .btn-yes:hover {
+      background-color: var(--sage-hover);
+      box-shadow: 0 8px 20px rgba(103, 120, 97, 0.35);
+    }
+
+    /* Dodging NO button positioned inside the card frame */
+    .btn-no {
+      position: absolute;
+      right: 34px;
+      bottom: 62px;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: 1.5px solid #B65D6D;
+      background: radial-gradient(circle at 35% 30%, #E7A9B4, #C66D7D);
+      color: #FFFFFF;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 4px;
+      line-height: 1.1;
+      cursor: pointer;
+      box-shadow: 0 6px 14px rgba(198, 109, 125, 0.35), inset 0 2px 4px rgba(255, 255, 255, 0.45);
+      transition: left 0.24s cubic-bezier(0.22, 1.28, 0.36, 1), top 0.24s cubic-bezier(0.22, 1.28, 0.36, 1), transform 0.22s ease, box-shadow 0.22s ease;
+      user-select: none;
+      z-index: 15;
+    }
+
+    .btn-no.merged-on-yes {
+      box-shadow: 0 4px 14px rgba(103, 120, 97, 0.45), inset 0 2px 5px rgba(255, 255, 255, 0.55);
+    }
+
+    /* ================= SCREEN 2: PLANNER ================= */
+    #screen-2 {
+      overflow-y: auto;
+      padding-bottom: 28px;
+    }
+
+    .red-heart-badge {
+      text-align: center;
+      font-size: 26px;
+      margin: 8px 0 4px;
+      filter: saturate(0.85) brightness(1.06) drop-shadow(0 3px 8px rgba(229, 152, 172, 0.35));
+    }
+
+    .sub-italic {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 16px;
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .section-label {
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    /* Calendar styles */
+    .calendar-box {
+      margin-bottom: 18px;
+    }
+
+    .cal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding: 0 4px;
+    }
+
+    .cal-nav {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 1px solid var(--border-inner);
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      transition: all 0.2s;
+    }
+
+    .cal-nav:hover {
+      background: #F4E6E8;
+      color: var(--text-dark);
+    }
+
+    .cal-month-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 16px;
+      color: var(--text-dark);
+    }
+
+    .cal-weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+      font-size: 9px;
+      font-weight: 600;
+      color: #B49B9E;
+      margin-bottom: 8px;
+    }
+
+    .cal-days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+      text-align: center;
+    }
+
+    .cal-day {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 14px;
+      color: var(--text-dark);
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .cal-day:hover:not(.empty) {
+      background-color: #F3E3E6;
+    }
+
+    .cal-day.selected {
+      background-color: #EAD2D6;
+      color: var(--text-dark);
+      font-weight: 600;
+      box-shadow: inset 0 0 0 1px #CFA5AD;
+    }
+
+    .cal-day.empty {
+      cursor: default;
+    }
+
+    /* Time select styles */
+    .time-select-wrapper {
+      position: relative;
+      margin-bottom: 18px;
+    }
+
+    .time-select {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1px solid var(--border-inner);
+      border-radius: 6px;
+      background-color: #FCF9F5;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 13px;
+      color: var(--text-dark);
+      appearance: none;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .time-select:focus {
+      border-color: var(--accent-rose);
+    }
+
+    .time-select-wrapper::after {
+      content: "⌄";
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-58%);
+      color: var(--text-muted);
+      pointer-events: none;
+      font-size: 15px;
+    }
+
+    /* 6 Activity Options Grid */
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 22px;
+    }
+
+    .option-card {
+      border: 1px solid var(--border-inner);
+      border-radius: 6px;
+      padding: 12px 6px;
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 12.5px;
+      color: var(--text-dark);
+      background-color: rgba(255, 255, 255, 0.55);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+    }
+
+    .option-card:hover {
+      border-color: #CFA5AD;
+      background-color: #F9EFF1;
+    }
+
+    .option-card.selected {
+      border: 1.5px solid #B5727E;
+      background-color: #F5E6E9;
+      font-weight: 600;
+      box-shadow: 0 3px 10px rgba(181, 114, 126, 0.12);
+    }
+
+    .btn-confirm {
+      width: 100%;
+      background-color: var(--sage-green);
+      color: #FFFFFF;
+      border: none;
+      padding: 14px 20px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2.2px;
+      text-transform: uppercase;
+      border-radius: 3px;
+      cursor: pointer;
+      box-shadow: 0 6px 16px rgba(103, 120, 97, 0.25);
+      transition: background-color 0.2s ease;
+    }
+
+    .btn-confirm:hover {
+      background-color: var(--sage-hover);
+    }
+
+    /* ================= SCREEN 3: INVITATION CARD ================= */
+    #screen-3 {
+      justify-content: space-between;
+      align-items: center;
+      text-align: center;
+    }
+
+    .invite-header {
+      margin-top: 4px;
+    }
+
+    .invite-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      font-weight: 400;
+      color: var(--text-dark);
+      margin-top: 8px;
+    }
+
+    .invite-title em {
+      font-style: italic;
+      color: var(--accent-rose);
+    }
+
+    .invitation-box {
+      position: relative;
+      width: 100%;
+      border: 1px solid #DFC4C9;
+      background-color: rgba(255, 253, 250, 0.85);
+      padding: 26px 18px;
+      margin: 18px 0;
+      box-shadow: 0 8px 24px rgba(74, 59, 60, 0.04);
+    }
+
+    .box-flower-tl {
+      position: absolute;
+      top: 10px;
+      left: 12px;
+      color: #BA7D88;
+      font-size: 18px;
+      opacity: 0.85;
+    }
+
+    .box-flower-br {
+      position: absolute;
+      bottom: 10px;
+      right: 12px;
+      color: #BA7D88;
+      font-size: 18px;
+      opacity: 0.85;
+    }
+
+    .invite-eyebrow {
+      font-size: 8.5px;
+      font-weight: 600;
+      letter-spacing: 2.2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .invite-subhead {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 24px;
+      color: var(--text-dark);
+      padding-bottom: 14px;
+      border-bottom: 1px solid #EAD8DB;
+      margin-bottom: 16px;
+    }
+
+    .invite-details {
+      font-family: 'Playfair Display', serif;
+      font-size: 16.5px;
+      line-height: 1.55;
+      color: var(--text-dark);
+      margin-bottom: 14px;
+    }
+
+    .invite-activity {
+      font-weight: 600;
+      color: var(--accent-rose);
+      margin-top: 2px;
+    }
+
+    .invite-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 15px;
+      line-height: 1.45;
+      color: var(--text-muted);
+      max-width: 240px;
+      margin: 0 auto;
+    }
+
+    .btn-change-plans {
+      background: none;
+      border: none;
+      border-bottom: 1px solid var(--text-muted);
+      padding-bottom: 3px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 12px;
+      color: var(--text-muted);
+      cursor: pointer;
+      margin-bottom: 12px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .btn-change-plans:hover {
+      color: var(--text-dark);
+      border-color: var(--text-dark);
+    }
+
+    /* Confetti Canvas */
+    #confetti-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 20;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card-frame" id="cardFrame">
+    <div class="inner-border"></div>
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- Watercolor Rose Corner Top-Right -->
+    <svg class="floral-tr" viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M135 55C110 45 92 60 88 72C105 74 124 68 135 55Z" fill="#B7C2B0" opacity="0.65"/>
+      <path d="M145 95C120 98 106 118 108 132C125 126 138 112 145 95Z" fill="#A6B49E" opacity="0.6"/>
+      <path d="M168 115C154 138 156 164 164 176C174 158 176 134 168 115Z" fill="#B7C2B0" opacity="0.55"/>
+      <path d="M122 30C125 12 142 4 152 6C146 20 135 28 122 30Z" fill="#C4CEBD" opacity="0.6"/>
+      <path d="M160 20C156 80 158 145 148 205" stroke="#9AA892" stroke-width="1.3" opacity="0.7"/>
+      <path d="M157 88C136 96 122 110 112 126" stroke="#9AA892" stroke-width="1.1" opacity="0.65"/>
+      <circle cx="136" cy="58" r="32" fill="#F2D1D5" opacity="0.75"/>
+      <circle cx="132" cy="54" r="24" fill="#E8B4BC" opacity="0.8"/>
+      <path d="M116 54C116 42 130 35 142 40C152 45 152 62 140 69C128 75 116 66 116 54Z" fill="#DF9BA6" opacity="0.75"/>
+      <path d="M123 53C123 46 132 42 139 46C145 50 144 60 136 63C129 66 123 60 123 53Z" fill="#CE7D8A" opacity="0.75"/>
+      <path d="M129 53C131 49 136 49 138 53C139 57 134 60 130 57" stroke="#FDFBF7" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+      <circle cx="166" cy="24" r="14" fill="#EBBBC2" opacity="0.75"/>
+      <circle cx="165" cy="23" r="8" fill="#D68A96" opacity="0.75"/>
+    </svg>
+
+    <!-- Watercolor Rose Corner Bottom-Left -->
+    <svg class="floral-bl" viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M135 55C110 45 92 60 88 72C105 74 124 68 135 55Z" fill="#B7C2B0" opacity="0.65"/>
+      <path d="M145 95C120 98 106 118 108 132C125 126 138 112 145 95Z" fill="#A6B49E" opacity="0.6"/>
+      <path d="M168 115C154 138 156 164 164 176C174 158 176 134 168 115Z" fill="#B7C2B0" opacity="0.55"/>
+      <path d="M160 20C156 80 158 145 148 205" stroke="#9AA892" stroke-width="1.3" opacity="0.7"/>
+      <circle cx="136" cy="58" r="32" fill="#F2D1D5" opacity="0.75"/>
+      <circle cx="132" cy="54" r="24" fill="#E8B4BC" opacity="0.8"/>
+      <path d="M116 54C116 42 130 35 142 40C152 45 152 62 140 69C128 75 116 66 116 54Z" fill="#DF9BA6" opacity="0.75"/>
+      <path d="M123 53C123 46 132 42 139 46C145 50 144 60 136 63C129 66 123 60 123 53Z" fill="#CE7D8A" opacity="0.75"/>
+      <circle cx="166" cy="24" r="14" fill="#EBBBC2" opacity="0.75"/>
+      <circle cx="165" cy="23" r="8" fill="#D68A96" opacity="0.75"/>
+    </svg>
+
+    <!-- Decorative Floating Tiny Hearts -->
+    <span class="heart-deco" style="top: 23%; left: 16%;">♥</span>
+    <span class="heart-deco" style="top: 47%; right: 14%; font-size: 9px;">♥</span>
+    <span class="heart-deco" style="bottom: 26%; right: 19%;">♥</span>
+
+    <!-- ==================== SCREEN 1: PROPOSAL ==================== -->
+    <section id="screen-1" class="screen active">
+      <div>
+        <div class="eyebrow">A LITTLE NOTE FOR YOU</div>
+        <div class="divider-line"></div>
+      </div>
+
+      <div class="proposal-center">
+        <div class="tiny-rose-icon">❧ ♥ ❧</div>
+        <h1 class="main-heading">Will you go out<br><em>with me?</em></h1>
+        <p class="tease-subtitle" id="teaseSubtitle">Say yes to a little adventure with me ✨</p>
+        <button class="btn-yes" id="btnYes">YES, I WILL</button>
+      </div>
+
+      <button class="btn-no" id="btnNo">NO</button>
+    </section>
+
+    <!-- ==================== SCREEN 2: DATE PLANNER ==================== -->
+    <section id="screen-2" class="screen">
+      <div>
+        <div class="eyebrow">THE HAPPY DETAILS</div>
+        <div class="divider-line"></div>
+        <div class="red-heart-badge">🩷</div>
+        <h2 class="main-heading" style="text-align:center; font-size: 31px; margin-bottom: 4px;">
+          Yay — it's <em>a date!</em>
+        </h2>
+        <p class="sub-italic">Let's make it a lovely one.</p>
+      </div>
+
+      <!-- Choose Date -->
+      <div class="calendar-box">
+        <div class="section-label">CHOOSE OUR DATE</div>
+        <div class="cal-header">
+          <button class="cal-nav" id="prevMonth" aria-label="Previous Month">‹</button>
+          <div class="cal-month-title" id="calMonthTitle">November 2026</div>
+          <button class="cal-nav" id="nextMonth" aria-label="Next Month">›</button>
+        </div>
+        <div class="cal-weekdays">
+          <div>Su</div><div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div>
+        </div>
+        <div class="cal-days" id="calDays"></div>
+      </div>
+
+      <!-- Choose Time -->
+      <div>
+        <div class="section-label">CHOOSE A TIME</div>
+        <div class="time-select-wrapper">
+          <select id="timeSelect" class="time-select">
+            <option value="10:00 AM">10:00 AM</option>
+            <option value="12:30 PM">12:30 PM</option>
+            <option value="3:00 PM">3:00 PM</option>
+            <option value="5:00 PM">5:00 PM</option>
+            <option value="6:00 PM" selected>6:00 PM</option>
+            <option value="7:30 PM">7:30 PM</option>
+            <option value="8:30 PM">8:30 PM</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Choose Activity (Fixed 6 Options) -->
+      <div>
+        <div class="section-label">WHAT SHALL WE DO?</div>
+        <div class="options-grid" id="optionsGrid">
+          <div class="option-card selected" data-activity="Library date">Library date</div>
+          <div class="option-card" data-activity="Picnic">Picnic</div>
+          <div class="option-card" data-activity="Dessert">Dessert</div>
+          <div class="option-card" data-activity="City stroll">City stroll</div>
+          <div class="option-card" data-activity="Sightseeing">Sightseeing</div>
+          <div class="option-card" data-activity="Hangout">Hangout</div>
+        </div>
+      </div>
+
+      <button class="btn-confirm" id="btnConfirm">CONFIRM OUR DATE</button>
+    </section>
+
+    <!-- ==================== SCREEN 3: FINAL INVITATION ==================== -->
+    <section id="screen-3" class="screen">
+      <div class="invite-header">
+        <div class="tiny-rose-icon" style="margin-bottom: 6px;">❧ ♥ ❧</div>
+        <div class="eyebrow">THIS IS REALLY HAPPENING</div>
+        <h2 class="invite-title">A date, <em>with you.</em></h2>
+      </div>
+
+      <div class="invitation-box">
+        <span class="box-flower-tl">✿</span>
+        <span class="box-flower-br">✿</span>
+
+        <div class="invite-eyebrow">YOU ARE CORDIALLY INVITED</div>
+        <div class="invite-subhead">To our little date</div>
+
+        <div class="invite-details">
+          <div id="finalDateText">Tuesday, November 24,<br>2026</div>
+          <div id="finalTimeText">6:00 PM</div>
+          <div class="invite-activity" id="finalActivityText">Library date</div>
+        </div>
+
+        <p class="invite-quote" id="finalQuoteText">
+          "Quiet aisles, shared pages, and the sweetest company right beside me."
+        </p>
+      </div>
+
+      <div>
+        <button class="btn-change-plans" id="btnChangePlans">Change our plans</button>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // ================= 1. DODGING "NO" BUTTON ACROSS FULL CARD =================
+    const cardFrame = document.getElementById('cardFrame');
+    const btnNo = document.getElementById('btnNo');
+    const btnYes = document.getElementById('btnYes');
+    const teaseSubtitle = document.getElementById('teaseSubtitle');
+
+    const noLabels = [
+      "NO",
+      "Sure?",
+      "Wait—",
+      "Really?",
+      "Think again!",
+      "Don't!",
+      "Are u sure?",
+      "Pls?",
+      "Try Yes!",
+      "Nope!",
+      "Nice try!",
+      "Click Yes ♡"
+    ];
+
+    const teaseMessages = [
+      "Are you sure? Look at the green button instead...",
+      "Wait a second, let's think this through!",
+      "My heart says you meant to press Yes ✨",
+      "That button seems a little shy today...",
+      "Good things happen when you say Yes!",
+      "I promise it will be worth your while ♥",
+      "No more running—the choice is clear now!"
+    ];
+
+    const MERGE_ATTEMPT = 7; // On the 7th attempt, NO lands directly on YES
+    let noAttempts = 0;
+    let isMergedOnYes = false;
+    let lastDodgeTime = 0;
+
+    function placeNoDirectlyOnYes() {
+      const frameRect = cardFrame.getBoundingClientRect();
+      const yesRect = btnYes.getBoundingClientRect();
+      const noSize = 56;
+
+      // Center NO directly over the YES button inside cardFrame coordinates
+      const targetX = (yesRect.left - frameRect.left) + (yesRect.width / 2) - (noSize / 2);
+      const targetY = (yesRect.top - frameRect.top) + (yesRect.height / 2) - (noSize / 2);
+
+      btnNo.style.right = 'auto';
+      btnNo.style.bottom = 'auto';
+      btnNo.style.left = `${targetX}px`;
+      btnNo.style.top = `${targetY}px`;
+      btnNo.style.transform = 'scale(0.95)';
+      btnNo.textContent = 'YES ♡';
+      btnNo.classList.add('merged-on-yes');
+      teaseSubtitle.textContent = 'No more escaping—tap right here to say Yes ✨';
+      isMergedOnYes = true;
+    }
+
+    function dodgeNoButton(e) {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+
+      // If already landed on YES, clicking/tapping it triggers YES directly
+      if (isMergedOnYes) {
+        triggerYes();
+        return;
+      }
+
+      // Prevent duplicate firing when hover + pointerdown trigger back-to-back
+      const now = Date.now();
+      if (now - lastDodgeTime < 140) return;
+      lastDodgeTime = now;
+
+      noAttempts++;
+
+      // Cycle text inside the circular NO button
+      const labelIndex = noAttempts % noLabels.length;
+      btnNo.textContent = noLabels[labelIndex];
+
+      // Update romantic teasing subtitle
+      const msgIndex = (noAttempts - 1) % teaseMessages.length;
+      teaseSubtitle.textContent = teaseMessages[msgIndex];
+
+      // Grow YES button and shrink NO button gradually
+      const yesScale = Math.min(1 + noAttempts * 0.055, 1.38);
+      btnYes.style.transform = `scale(${yesScale})`;
+
+      if (noAttempts >= MERGE_ATTEMPT) {
+        placeNoDirectlyOnYes();
+        return;
+      }
+
+      const noScale = Math.max(1 - noAttempts * 0.03, 0.8);
+      btnNo.style.transform = `scale(${noScale})`;
+
+      // Compute full safe bounds inside cardFrame (top, middle, bottom, left, right)
+      const frameWidth = cardFrame.clientWidth;
+      const frameHeight = cardFrame.clientHeight;
+      const btnSize = 56;
+      const pad = 22;
+
+      const minX = pad;
+      const maxX = Math.max(minX + 10, frameWidth - btnSize - pad);
+      const minY = 76; // Below top eyebrow & inner border
+      const maxY = Math.max(minY + 10, frameHeight - btnSize - 26);
+
+      const yesRect = btnYes.getBoundingClientRect();
+      const frameRect = cardFrame.getBoundingClientRect();
+      const currentX = parseFloat(btnNo.style.left) || (frameWidth - btnSize - 34);
+      const currentY = parseFloat(btnNo.style.top) || (frameHeight - btnSize - 62);
+
+      let randomX = currentX;
+      let randomY = currentY;
+
+      // Pick a fresh position across the whole card while avoiding overlapping YES or staying frozen
+      for (let attempt = 0; attempt < 18; attempt++) {
+        const candidateX = minX + Math.random() * (maxX - minX);
+        const candidateY = minY + Math.random() * (maxY - minY);
+
+        const candCenterX = frameRect.left + candidateX + btnSize / 2;
+        const candCenterY = frameRect.top + candidateY + btnSize / 2;
+
+        const yesCenterX = yesRect.left + yesRect.width / 2;
+        const yesCenterY = yesRect.top + yesRect.height / 2;
+
+        const distToYes = Math.hypot(candCenterX - yesCenterX, candCenterY - yesCenterY);
+        const distFromPrev = Math.hypot(candidateX - currentX, candidateY - currentY);
+
+        if (distToYes > 76 && distFromPrev > 65) {
+          randomX = candidateX;
+          randomY = candidateY;
+          break;
+        }
+      }
+
+      btnNo.style.right = 'auto';
+      btnNo.style.bottom = 'auto';
+      btnNo.style.left = `${randomX}px`;
+      btnNo.style.top = `${randomY}px`;
+    }
+
+    btnNo.addEventListener('pointerdown', dodgeNoButton);
+    btnNo.addEventListener('click', (e) => {
+      if (isMergedOnYes) {
+        e.preventDefault();
+        triggerYes();
+      }
+    });
+    btnNo.addEventListener('mouseover', () => {
+      if (!isMergedOnYes && window.matchMedia('(hover: hover)').matches) {
+        dodgeNoButton();
+      }
+    });
+
+    // ================= 2. SCREEN TRANSITIONS & CONFETTI =================
+    const screen1 = document.getElementById('screen-1');
+    const screen2 = document.getElementById('screen-2');
+    const screen3 = document.getElementById('screen-3');
+
+    function showScreen(targetScreen) {
+      [screen1, screen2, screen3].forEach(s => s.classList.remove('active'));
+      targetScreen.classList.add('active');
+    }
+
+    function triggerYes() {
+      launchConfetti();
+      showScreen(screen2);
+    }
+
+    btnYes.addEventListener('click', triggerYes);
+
+    // ================= 3. INTERACTIVE CALENDAR & OPTIONS =================
+    const monthNames = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+    const dayNames = [
+      "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
+    ];
+
+    let currentYear = 2026;
+    let currentMonth = 10; // November (0-indexed)
+    let selectedDate = new Date(2026, 10, 24);
+    let selectedActivity = "Library date";
+
+    const calMonthTitle = document.getElementById('calMonthTitle');
+    const calDays = document.getElementById('calDays');
+
+    function renderCalendar() {
+      calMonthTitle.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+      calDays.innerHTML = '';
+
+      const firstDayIndex = new Date(currentYear, currentMonth, 1).getDay();
+      const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+      for (let i = 0; i < firstDayIndex; i++) {
+        const emptyCell = document.createElement('div');
+        emptyCell.className = 'cal-day empty';
+        calDays.appendChild(emptyCell);
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dayCell = document.createElement('div');
+        dayCell.className = 'cal-day';
+        dayCell.textContent = day;
+
+        if (
+          selectedDate.getFullYear() === currentYear &&
+          selectedDate.getMonth() === currentMonth &&
+          selectedDate.getDate() === day
+        ) {
+          dayCell.classList.add('selected');
+        }
+
+        dayCell.addEventListener('click', () => {
+          selectedDate = new Date(currentYear, currentMonth, day);
+          renderCalendar();
+        });
+
+        calDays.appendChild(dayCell);
+      }
+    }
+
+    document.getElementById('prevMonth').addEventListener('click', () => {
+      currentMonth--;
+      if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+      }
+      renderCalendar();
+    });
+
+    document.getElementById('nextMonth').addEventListener('click', () => {
+      currentMonth++;
+      if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+      }
+      renderCalendar();
+    });
+
+    // 6 Activity Cards Selection
+    const optionCards = document.querySelectorAll('.option-card');
+    optionCards.forEach(card => {
+      card.addEventListener('click', () => {
+        optionCards.forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        selectedActivity = card.dataset.activity;
+      });
+    });
+
+    // Romantic quotes per activity
+    const activityQuotes = {
+      "Library date": '"Quiet aisles, shared pages, and the sweetest company right beside me."',
+      "Picnic": '"A cozy blanket, fresh breeze, and all the time in the world with you."',
+      "Dessert": '"Something sweet on the table, and someone even sweeter across from me."',
+      "City stroll": '"No rush, nowhere to be—just walking side by side and talking for hours."',
+      "Sightseeing": '"Exploring new views together, though you will still be my favorite sight."',
+      "Hangout": '"Good laughs, easy conversation, and simply enjoying being together."'
+    };
+
+    // Confirm Date -> Screen 3
+    document.getElementById('btnConfirm').addEventListener('click', () => {
+      const dayName = dayNames[selectedDate.getDay()];
+      const monthName = monthNames[selectedDate.getMonth()];
+      const dayNum = selectedDate.getDate();
+      const yearNum = selectedDate.getFullYear();
+
+      const timeVal = document.getElementById('timeSelect').value;
+
+      document.getElementById('finalDateText').innerHTML = `${dayName}, ${monthName} ${dayNum},<br>${yearNum}`;
+      document.getElementById('finalTimeText').textContent = timeVal;
+      document.getElementById('finalActivityText').textContent = selectedActivity;
+      document.getElementById('finalQuoteText').textContent =
+        activityQuotes[selectedActivity] || '"Good moments and the best person right beside me."';
+
+      launchConfetti();
+      showScreen(screen3);
+    });
+
+    // Change our plans -> Return to Screen 2 preserving selections
+    document.getElementById('btnChangePlans').addEventListener('click', () => {
+      currentYear = selectedDate.getFullYear();
+      currentMonth = selectedDate.getMonth();
+      renderCalendar();
+      showScreen(screen2);
+    });
+
+    // ================= 4. SUBTLE ROMANTIC CONFETTI =================
+    function launchConfetti() {
+      const canvas = document.getElementById('confetti-canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = cardFrame.clientWidth;
+      canvas.height = cardFrame.clientHeight;
+
+      const colors = ['#E5C7CD', '#B5727E', '#677861', '#F2D1D5', '#D9A5AE'];
+      const particles = Array.from({ length: 45 }, () => ({
+        x: Math.random() * canvas.width,
+        y: -10 - Math.random() * 80,
+        r: 3 + Math.random() * 4,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        vy: 1.8 + Math.random() * 2.5,
+        vx: -1 + Math.random() * 2,
+        rot: Math.random() * 360,
+        vRot: -4 + Math.random() * 8
+      }));
+
+      let frames = 0;
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.rot += p.vRot;
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate((p.rot * Math.PI) / 180);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.r, -p.r / 2, p.r * 2, p.r);
+          ctx.restore();
+        });
+        frames++;
+        if (frames < 120) {
+          requestAnimationFrame(animate);
+        } else {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+      }
+      animate();
+    }
+
+    // Initialize Calendar
+    renderCalendar();
+  </script>
+</body>
+</html>
